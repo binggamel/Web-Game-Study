@@ -1,5 +1,6 @@
 var table = document.getElementById("table");
 var data = [];
+var score = document.getElementById("score").textContent;
 
 function clear() {
   var fragment = document.createDocumentFragment();
@@ -95,26 +96,102 @@ window.addEventListener("mouseup", function (e) {
 
   switch (direction) {
     case "left":
+      var newData = [[], [], [], []];
+      data.forEach(function (rowData, i) {
+        rowData.forEach(function (columData, j) {
+          if (columData) {
+            if (
+              newData[i][newData[i].length - 1] &&
+              newData[i][newData[i].length - 1] === columData
+            ) {
+              newData[i][newData[i].length - 1] *= 2;
+              var currentScore = parseInt(score.textContent, 10);
+              score.textContent =
+                currentScore + newData[i][newData[i].length - 1];
+            } else {
+              newData[i].push(columData);
+            }
+          }
+        });
+      });
+      console.log(newData);
+      [1, 2, 3, 4].forEach(function (rowData, i) {
+        [1, 2, 3, 4].forEach(function (columData, j) {
+          data[i][j] = newData[i][j] || 0;
+        });
+      });
       break;
     case "right":
-      break;
-    case "bottom":
+      var newData = [[], [], [], []];
+      data.forEach(function (rowData, i) {
+        rowData.forEach(function (columData, j) {
+          if (columData) {
+            if (newData[i][0] && newData[i][0] === columData) {
+              newData[i][0] *= 2;
+              var currentScore = parseInt(score.textContent, 10);
+              score.textContent = currentScore + newData[i][0];
+            } else {
+              newData[i].unshift(columData);
+            }
+          }
+        });
+      });
+      console.log(newData);
+      [1, 2, 3, 4].forEach(function (rowData, i) {
+        [1, 2, 3, 4].forEach(function (columData, j) {
+          data[i][3 - j] = newData[i][j] || 0;
+        });
+      });
       break;
     case "top":
       var newData = [[], [], [], []];
       data.forEach(function (rowData, i) {
         rowData.forEach(function (columData, j) {
           if (columData) {
-            newData[j].unshift(columData);
+            if (
+              newData[j][newData[j].length - 1] &&
+              newData[j][newData[j].length - 1] === columData
+            ) {
+              newData[j][newData[j].length - 1] *= 2;
+              var currentScore = parseInt(score.textContent, 10);
+              score.textContent =
+                currentScore + newData[j][newData[j].length - 1];
+            } else {
+              newData[j].push(columData);
+            }
           }
         });
       });
+      console.log(newData);
       [1, 2, 3, 4].forEach(function (columData, i) {
         [1, 2, 3, 4].forEach(function (rowData, j) {
           data[j][i] = newData[i][j] || 0;
         });
       });
       break;
+    case "bottom":
+      var newData = [[], [], [], []];
+      data.forEach(function (rowData, i) {
+        rowData.forEach(function (columData, j) {
+          if (columData) {
+            if (newData[j][0] && newData[j][0] === columData) {
+              newData[j][0] *= 2;
+              var currentScore = parseInt(score.textContent, 10);
+              score.textContent = currentScore + newData[j][0];
+            } else {
+              newData[j].unshift(columData);
+            }
+          }
+        });
+      });
+      console.log(newData);
+      [1, 2, 3, 4].forEach(function (columData, i) {
+        [1, 2, 3, 4].forEach(function (rowData, j) {
+          data[3 - j][i] = newData[i][j] || 0;
+        });
+      });
+      break;
   }
+  draw();
   mkRandom();
 });
